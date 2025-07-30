@@ -23,7 +23,9 @@ def create_app():
     global redis_client
     redis_client = redis.Redis(
         host=os.getenv("REDIS_HOST"),
-        port=int(os.getenv("REDIS_PORT")),
+        port=int(os.getenv("REDIS_PORT", 6379)),
+        password=os.getenv("REDIS_PASSWORD"),  # Add password from Upstash token
+        ssl=True,                              # Upstash requires SSL
         decode_responses=True
     )
 
