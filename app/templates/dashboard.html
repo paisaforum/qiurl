@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard – qiurl</title>
+</head>
+<body>
+    <h2>Welcome {{ current_user.email }}</h2>
+    <a href="{{ url_for('auth.logout') }}">Logout</a>
+
+    <h3>Create Short URL</h3>
+    <form method="POST">
+        <label>Long URL:</label><br>
+        <input type="url" name="url" required><br><br>
+        <label>Custom Slug (optional):</label><br>
+        <input type="text" name="slug"><br><br>
+        <button type="submit">Shorten</button>
+    </form>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul>
+                {% for category, message in messages %}
+                    <li><strong>{{ category.title() }}:</strong> {{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <h3>Your Short URLs</h3>
+    <ul>
+        {% for url in urls %}
+        <li>
+            <a href="/{{ url.slug }}" target="_blank">{{ request.host_url }}{{ url.slug }}</a> →
+            {{ url.original_url }}
+            {% if current_user.id == url.user_id or current_user.is_admin %}
+                [<a href="{{ url_for('routes.delete', slug=url.slug) }}">delete</a>]
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+
+    {% if current_user.is_admin %}
+        <h3>Create User</h3>
+        <form method="POST" action="{{ url_for('auth.register') }}">
+            <label>Email:</label><br>
+            <input type="email" name="email" required><br><br>
+            <label>Password:</label><br>
+            <input type="password" name="password" required><br><br>
+            <button type="submit">Add User</button>
+        </form>
+    {% endif %}
+</body>
+</html>
