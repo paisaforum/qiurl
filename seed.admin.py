@@ -7,8 +7,8 @@ from werkzeug.security import generate_password_hash
 app = create_app()
 
 with app.app_context():
-    email = os.getenv("ADMIN_EMAIL", "admin@example.com")
-    password = os.getenv("ADMIN_PASSWORD", "admin123")
+    email = os.getenv("ADMIN_EMAIL", "ronyforpremiumagents@gamil.com")
+    password = os.getenv("ADMIN_PASSWORD", "9402@Sahil*#")
 
     existing_user = User.query.filter_by(email=email).first()
     if existing_user:
